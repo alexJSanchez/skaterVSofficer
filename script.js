@@ -13,7 +13,6 @@ let exit = generateExit();
 let sandPits = [];
 let gameStarted = false;
 
-
 // Draw game map, human, zombies, exit
 function draw() {
     board.innerHTML = "";
@@ -101,8 +100,16 @@ function moveHuman(dx, dy) {
     if (head.x < 1 || head.x > gridSize || head.y < 1 || head.y > gridSize) {
         return; // prevent moving out of bounds
     }
+
+    // Check if the new position is a sandpit
+    for (let sandPit of sandPits) {
+        if (head.x === sandPit.x && head.y === sandPit.y) {
+            return; // prevent moving into sandpit
+        }
+    }
+
     human = [head];
-    moveZombies()
+    moveZombies();
     checkCollisions();
     draw();
 }
@@ -168,7 +175,6 @@ function handleKey(event) {
                 moveHuman(-1, -1);
                 break;
         }
-
     }
 }
 
@@ -202,13 +208,19 @@ function checkCollisions() {
 function gameOver(text) {
     // Game over logic
     console.log(text);
-
+    setTimeout(function () {
+        console.log('game over reset');
+        resetGame();
+    }, 3000); // 3000 milliseconds = 3 seconds
 }
 
 function gameWon(text) {
     // Game won logic
     console.log(text);
-
+    setTimeout(function () {
+        console.log('game reset');
+        resetGame();
+    }, 3000); // 3000 milliseconds = 3 seconds
 }
 
 // In the startGame function, start the game loop
@@ -216,6 +228,27 @@ function startGame() {
     gameStarted = true; // Keep track of a running game
     instructionText.style.display = "none";
     logo.style.display = "none";
+    draw();
+}
+
+// Reset game
+function resetGame() {
+    instructionText.style.display = "block";
+    logo.style.display = "block";
+    // Define game variables
+    human = [{ x: 10, y: 10 }];
+    zombies = [];
+    exit = generateExit();
+    sandPits = [];
+    for (let i = 0; i < 3; i++) {
+        const zombiePos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+        zombies.push(zombiePos);
+    }
+    for (let i = 0; i < 10; i++) {
+        const sandPit = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+        sandPits.push(sandPit);
+    }
+    gameStarted = false;
     draw();
 }
 

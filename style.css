@@ -43,11 +43,12 @@ body,
 	position: absolute;
 	top: 65%;
 	color: #333;
-	width: 300px;
+	width: 359px;
 	text-align: center;
 	text-transform: capitalize;
-	padding: 30px;
+	padding: 20px;
 	margin: 0;
+    background-color: #c4cfa3;
 }
 
 .scores {
