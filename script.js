@@ -8,7 +8,7 @@ const highScoreText = document.getElementById("highScore");
 
 // Define game variables
 const gridSize = 20;
-let snake = [{ x: 10, y: 10 }];
+let human = [{ x: 10, y: 10 }];
 // let food = generateFood();
 let highScore = 0;
 let gameInterval;
@@ -20,4 +20,13 @@ let gameStarted = false;
 function draw() {
 	board.innerHTML = "";
 
+}
+
+// Draw snake
+function drawHuman() {
+	snake.forEach((segment) => {
+		const humanElement = createGameElement("div", "human");
+		setPosition(humanElement, segment);
+		board.appendChild(humanElement);
+	});
 }
