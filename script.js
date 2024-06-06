@@ -10,7 +10,7 @@ const highScoreText = document.getElementById("highScore");
 const gridSize = 20;
 let human = [{ x: 10, y: 10 }];
 let zombie = [{ x: 5, y: 5 }];
-let exit = [{ x: 18, y: 18 }];
+let exit = generateExit()
 // let food = generateFood();
 let highScore = 0;
 let gameInterval;
@@ -65,5 +65,10 @@ function setPosition(element, position) {
 	element.style.gridColumn = position.x;
 	element.style.gridRow = position.y;
 }
-
+// Generate food
+function generateExit() {
+	const x = Math.floor(Math.random() * gridSize) + 1;
+	const y = Math.floor(Math.random() * gridSize) + 1;
+	return [{ x:x, y:y }];
+}
 draw()
