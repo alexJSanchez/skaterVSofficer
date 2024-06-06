@@ -9,6 +9,7 @@ const highScoreText = document.getElementById("highScore");
 // Define game variables
 const gridSize = 20;
 let human = [{ x: 10, y: 10 }];
+let zombie = [{ x: 5, y: 5 }];
 // let food = generateFood();
 let highScore = 0;
 let gameInterval;
@@ -20,15 +21,26 @@ let gameStarted = false;
 function draw() {
 	board.innerHTML = "";
     drawHuman()
+    drawZombie()
 
 }
 
-// Draw snake
+// Draw human
 function drawHuman() {
 	human.forEach((segment) => {
 		const humanElement = createGameElement("div", "human");
+        humanElement.innerHTML = "H"
 		setPosition(humanElement, segment);
 		board.appendChild(humanElement);
+	});
+}
+// Draw human
+function drawZombie() {
+	zombie.forEach((segment) => {
+		const zombieElement = createGameElement("div", "zombie");
+        zombieElement.innerHTML = "Z"
+		setPosition(zombieElement, segment);
+		board.appendChild(zombieElement);
 	});
 }
 // Create a snake or food cube/div
@@ -37,7 +49,7 @@ function createGameElement(tag, className) {
 	element.className = className;
 	return element;
 }
-// Set the position of snake or food
+
 function setPosition(element, position) {
 	element.style.gridColumn = position.x;
 	element.style.gridRow = position.y;
