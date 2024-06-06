@@ -56,7 +56,7 @@ function drawExit() {
 }
 
 // Generate ten random positions for the zombies
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 3; i++) {
     const zombiePos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
     zombies.push(zombiePos);
 }
@@ -137,23 +137,40 @@ function handleKey(event) {
         startGame();
     } else {
         switch (event.key) {
-            case "ArrowUp":
             case "w":
+            case "ArrowUp":
                 moveHuman(0, -1);
                 break;
-            case "ArrowDown":
-            case "s":
-                moveHuman(0, 1);
+            case "e":
+            case "ArrowUp-right":
+                moveHuman(1, -1);
                 break;
-            case "ArrowLeft":
-            case "a":
-                moveHuman(-1, 0);
-                break;
-            case "ArrowRight":
             case "d":
+            case "ArrowRight":
                 moveHuman(1, 0);
                 break;
+            case "c":
+            case "ArrowDown-right":
+                moveHuman(1, 1);
+                break;
+            case "x":
+            case "Down":
+                moveHuman(0, 1);
+                break;
+            case "z":
+            case "ArrowDown-left":
+                moveHuman(-1, 1);
+                break;
+            case "a":
+            case "ArrowLeft":
+                moveHuman(-1, 0);
+                break;
+            case "q":
+            case "arrowLeft-up":
+                moveHuman(-1, -1);
+                break;
         }
+
     }
 }
 
@@ -164,8 +181,18 @@ function checkCollisions() {
     // Check if human hits zombies
     zombies.forEach((zombiePos, index) => {
         if (humanHead.x === zombiePos.x && humanHead.y === zombiePos.y) {
-            gameOver();
+            gameOver("Zombie has eaten your brain");
         }
+    });
+
+    // Check if zombie fell in pit
+    zombies = zombies.filter((zombiePos) => {
+        for (let sandPit of sandPits) {
+            if (zombiePos.x === sandPit.x && zombiePos.y === sandPit.y) {
+                return false; // Exclude this zombie
+            }
+        }
+        return true; // Keep this zombie
     });
 
     // Check if human hits exit
@@ -174,23 +201,22 @@ function checkCollisions() {
     }
 }
 
-function gameOver() {
+function gameOver(text) {
     // Game over logic
-    console.log("Game over!");
-    clearInterval(gameInterval); // Stop the game loop
+    console.log(text);
+
 }
 
 function gameWon() {
     // Game won logic
     console.log("You win!");
-    clearInterval(gameInterval); // Stop the game loop
 }
 
 // In the startGame function, start the game loop
 function startGame() {
     gameStarted = true; // Keep track of a running game
     instructionText.style.display = "none";
-    logo.style.display  = "none";
+    logo.style.display = "none";
     draw();
 }
 
