@@ -19,14 +19,24 @@ let gameStarted = false;
 // Draw game map, snake, food
 function draw() {
 	board.innerHTML = "";
+    drawHuman()
 
 }
 
 // Draw snake
 function drawHuman() {
-	snake.forEach((segment) => {
+	human.forEach((segment) => {
 		const humanElement = createGameElement("div", "human");
 		setPosition(humanElement, segment);
 		board.appendChild(humanElement);
 	});
 }
+// Create a snake or food cube/div
+function createGameElement(tag, className) {
+	const element = document.createElement(tag);
+	element.className = className;
+	return element;
+}
+
+
+draw()
