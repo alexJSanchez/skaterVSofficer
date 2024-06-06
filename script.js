@@ -11,8 +11,6 @@ let human = [{ x: 10, y: 10 }];
 let zombies = [];
 let exit = generateExit();
 let sandPits = [];
-let gameInterval;
-let gameSpeedDelay = 200;
 let gameStarted = false;
 
 
@@ -154,7 +152,7 @@ function handleKey(event) {
                 moveHuman(1, 1);
                 break;
             case "x":
-            case "Down":
+            case "ArrowDown":
                 moveHuman(0, 1);
                 break;
             case "z":
@@ -197,7 +195,7 @@ function checkCollisions() {
 
     // Check if human hits exit
     if (humanHead.x === exit[0].x && humanHead.y === exit[0].y) {
-        gameWon();
+        gameWon("You escaped");
     }
 }
 
@@ -207,9 +205,10 @@ function gameOver(text) {
 
 }
 
-function gameWon() {
+function gameWon(text) {
     // Game won logic
-    console.log("You win!");
+    console.log(text);
+
 }
 
 // In the startGame function, start the game loop
