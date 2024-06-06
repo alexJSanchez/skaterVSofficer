@@ -88,7 +88,12 @@ body,
 	border: #fff 1px solid;
     background-color: #000
 }
-
+.sand {
+    text-align: center;
+    color: red;
+	border: blue 1px solid;
+    background-color: yellow;
+}
 .exit {
     text-align: center;
     color: green;

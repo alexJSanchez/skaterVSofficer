@@ -10,8 +10,9 @@ const gridSize = 20;
 let human = [{ x: 10, y: 10 }];
 let zombie = [{ x: 5, y: 5 }];
 let exit = generateExit();
-
+let quickSand = generateExit();
 let highScore = 0;
+let sandPits = [];
 let gameInterval;
 let gameSpeedDelay = 200;
 let gameStarted = false;
@@ -21,6 +22,7 @@ function draw() {
 	board.innerHTML = "";
     drawHuman();
     drawZombie();
+    drawSand()
     drawExit();
 }
 
@@ -53,6 +55,26 @@ function drawExit() {
 		board.appendChild(exitElement);
 	});
 }
+
+
+// Generate ten random positions for the sand pits
+for (let i = 0; i < 10; i++) {
+    const sandPit = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+    sandPits.push(sandPit);
+}
+
+// Draw the sand pits on the game board
+function drawSand() {
+    sandPits.forEach((sandPit) => {
+        const sandElement = createGameElement("div", "sand");
+        sandElement.innerHTML = "P";
+        setPosition(sandElement, sandPit);
+        board.appendChild(sandElement);
+    });
+}
+
+// Call drawSand function to draw the sand pits
+drawSand();
 
 // Create a game element (human, zombie, exit)
 function createGameElement(tag, className) {
@@ -146,15 +168,55 @@ function handleKey(event) {
             moveHuman(-1, -1);
             break;
     }}
+    checkCollisions();
 }
 
+document.addEventListener("keydown", handleKey);
+// Function to check for collisions
+function checkCollisions() {
+    const humanHead = human[0];
+    const zombieHead = zombie[0];
+
+    // Check if human hits zombie
+    if (humanHead.x === zombieHead.x && humanHead.y === zombieHead.y) {
+        gameOver();
+        return;
+    }
+
+      // Check if zombie hits sand
+    const hitSandIndex = sandPits.findIndex((sandPit) => sandPit.x === zombieHead.x && sandPit.y === zombieHead.y);
+    if (hitSandIndex !== -1) {
+        zombie = []; // Remove the zombie
+        gameWon();
+        return;
+    }
+
+    // Check if human hits exit
+    if (humanHead.x === exit[0].x && humanHead.y === exit[0].y) {
+        gameWon();
+    }
+}
+
+function gameOver() {
+    // Game over logic
+    console.log("Game over!");
+    clearInterval(gameInterval); // Stop the game loop
+}
+
+function gameWon() {
+    // Game won logic
+    console.log("You win!");
+    clearInterval(gameInterval); // Stop the game loop
+}
+
+// In the startGame function, start the game loop
 function startGame() {
 	gameStarted = true; // Keep track of a running game
 	instructionText.style.display = "none";
 	logo.style.display = "none";
-	draw();
+    draw();
+	gameInterval = setInterval(() => {
+		draw();
+	}, gameSpeedDelay);
 }
-
-document.addEventListener("keydown", handleKey);
-
 draw();
