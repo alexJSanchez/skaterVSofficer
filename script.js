@@ -1,6 +1,7 @@
 // Define HTML elements
 const board = document.getElementById("game-board");
 const instructionText = document.getElementById("instruction-text");
+const gameInstructions = document.getElementById("gameInstructions")
 const logo = document.getElementById("logo");
 const score = document.getElementById("score");
 const highScoreText = document.getElementById("highScore");
@@ -27,7 +28,7 @@ function draw() {
 function drawHuman() {
     human.forEach((segment) => {
         const humanElement = createGameElement("div", "human");
-        humanElement.innerHTML = "H";
+        humanElement.innerHTML = "S";
         setPosition(humanElement, segment);
         board.appendChild(humanElement);
     });
@@ -253,7 +254,7 @@ function gameWon(text) {
     disconnectKeydown();
     highScoreText.style.display = "block"
     highScoreText.innerHTML = text
-    setTimeout(function () {
+    setTimeout(() => {
         console.log('Reseting game');
         resetGame();
     }, 3000); // 3000 milliseconds = 3 seconds
@@ -265,6 +266,9 @@ function startGame() {
     logo.style.display = "none";
     board.style.justifyItems = "unset"
     document.addEventListener("keydown", handleKey);
+    setTimeout(() => {
+        gameInstructions.style.display = "ablsolute"
+    }, 5000);
     draw();
 }
 

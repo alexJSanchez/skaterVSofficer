@@ -70,7 +70,7 @@ body,
 }
 
 #highScore {
-    font-size: 20px;
+    font-size: 25px;
 	color: #d8ddca;
 	display: none;
     padding-right: 20px;
@@ -109,4 +109,9 @@ body,
 #logo {
 	position: absolute;
 	width: 300px;
+}
+
+#gameInstructions{
+    display: none;
+    font-size: 50px;
 }
