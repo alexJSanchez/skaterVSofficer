@@ -12,6 +12,7 @@ let zombies = [];
 let exit = generateExit();
 let sandPits = [];
 let gameStarted = false;
+let gameScore = 0;
 
 // Draw game map, human, zombies, exit
 function draw() {
@@ -52,15 +53,21 @@ function drawExit() {
     });
 }
 
-// Generate ten random positions for the zombies
+// Generate three random positions for the zombies
 for (let i = 0; i < 3; i++) {
-    const zombiePos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+    let zombiePos;
+    do {
+        zombiePos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+    } while (zombiePos.x === 10 && zombiePos.y === 10);
     zombies.push(zombiePos);
 }
 
 // Generate ten random positions for the sand pits
 for (let i = 0; i < 10; i++) {
-    const sandPit = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+    let sandPit;
+    do {
+        sandPit = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+    } while (sandPit.x === 10 && sandPit.y === 10);
     sandPits.push(sandPit);
 }
 
@@ -89,9 +96,11 @@ function setPosition(element, position) {
 
 // Generate a new exit position
 function generateExit() {
-    const x = Math.floor(Math.random() * gridSize) + 1;
-    const y = Math.floor(Math.random() * gridSize) + 1;
-    return [{ x: x, y: y }];
+    let exitPos;
+    do {
+        exitPos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+    } while (exitPos.x === 10 && exitPos.y === 10); // Ensure exit is not at initial human position
+    return [exitPos];
 }
 
 // Move human
@@ -201,13 +210,20 @@ function checkCollisions() {
 
     // Check if human hits exit
     if (humanHead.x === exit[0].x && humanHead.y === exit[0].y) {
+        gameScore++
+        score.innerHTML = gameScore
         gameWon("You escaped");
     }
+}
+// Disconnect Keydown
+function disconnectKeydown() {
+    document.removeEventListener("keydown", handleKey);
 }
 
 function gameOver(text) {
     // Game over logic
     console.log(text);
+    disconnectKeydown();
     setTimeout(function () {
         console.log('game over reset');
         resetGame();
@@ -217,21 +233,21 @@ function gameOver(text) {
 function gameWon(text) {
     // Game won logic
     console.log(text);
+    disconnectKeydown();
     setTimeout(function () {
         console.log('game reset');
         resetGame();
     }, 3000); // 3000 milliseconds = 3 seconds
 }
-
 // In the startGame function, start the game loop
 function startGame() {
     gameStarted = true; // Keep track of a running game
     instructionText.style.display = "none";
     logo.style.display = "none";
+    document.addEventListener("keydown", handleKey);
     draw();
 }
 
-// Reset game
 function resetGame() {
     instructionText.style.display = "block";
     logo.style.display = "block";
@@ -241,15 +257,22 @@ function resetGame() {
     exit = generateExit();
     sandPits = [];
     for (let i = 0; i < 3; i++) {
-        const zombiePos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+        let zombiePos;
+        do {
+            zombiePos = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+        } while (zombiePos.x === 10 && zombiePos.y === 10); // Ensure zombies are not at initial human position
         zombies.push(zombiePos);
     }
     for (let i = 0; i < 10; i++) {
-        const sandPit = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+        let sandPit;
+        do {
+            sandPit = { x: Math.floor(Math.random() * gridSize) + 1, y: Math.floor(Math.random() * gridSize) + 1 };
+        } while (sandPit.x === 10 && sandPit.y === 10); // Ensure sand pits are not at initial human position
         sandPits.push(sandPit);
     }
     gameStarted = false;
     draw();
+    document.addEventListener("keydown", handleKey);
 }
 
 document.addEventListener("keydown", handleKey);
