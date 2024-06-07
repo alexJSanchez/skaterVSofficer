@@ -125,6 +125,8 @@ function moveHuman(dx, dy) {
 
 // Move zombies
 function moveZombies() {
+    let newZombiePositions = new Set();
+
     zombies = zombies.map((zombiePos) => {
         let dx = 0;
         let dy = 0;
@@ -141,9 +143,22 @@ function moveZombies() {
             dy = -1;
         }
 
-        return { x: zombiePos.x + dx, y: zombiePos.y + dy };
+        let newPos = { x: zombiePos.x + dx, y: zombiePos.y + dy };
+        let newPosString = `${newPos.x},${newPos.y}`;
+
+        // Check if the new position is already occupied by another zombie
+        if (newZombiePositions.has(newPosString)) {
+            // If it is, don't move this zombie
+            newPos = zombiePos;
+        } else {
+            // Otherwise, update the position
+            newZombiePositions.add(newPosString);
+        }
+
+        return newPos;
     });
 }
+
 
 // Handle keyboard events for movement
 function handleKey(event) {
@@ -224,6 +239,8 @@ function gameOver(text) {
     // Game over logic
     console.log(text);
     disconnectKeydown();
+    highScoreText.style.display = "block"
+    highScoreText.innerHTML = text
     setTimeout(function () {
         console.log('game over reset');
         resetGame();
@@ -234,8 +251,10 @@ function gameWon(text) {
     // Game won logic
     console.log(text);
     disconnectKeydown();
+    highScoreText.style.display = "block"
+    highScoreText.innerHTML = text
     setTimeout(function () {
-        console.log('game reset');
+        console.log('Reseting game');
         resetGame();
     }, 3000); // 3000 milliseconds = 3 seconds
 }
@@ -251,6 +270,8 @@ function startGame() {
 function resetGame() {
     instructionText.style.display = "block";
     logo.style.display = "block";
+    highScoreText.style.display = "block"
+    highScoreText.innerHTML = ""
     // Define game variables
     human = [{ x: 10, y: 10 }];
     zombies = [];
