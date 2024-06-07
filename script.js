@@ -263,6 +263,7 @@ function startGame() {
     gameStarted = true; // Keep track of a running game
     instructionText.style.display = "none";
     logo.style.display = "none";
+    board.style.justifyItems = "unset"
     document.addEventListener("keydown", handleKey);
     draw();
 }
